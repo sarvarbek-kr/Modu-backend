@@ -1,8 +1,14 @@
 import { Args, Mutation, Query,Resolver } from '@nestjs/graphql';
 import { MemberService } from './member.service';
-import { InternalServerErrorException} from '@nestjs/common';
+import { InternalServerErrorException, UseGuards} from '@nestjs/common';
 import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { Member } from '../../libs/dto/member/member';
+import { AuthGuard } from '../auth/guards/auth.guard';
+import { AuthMember } from '../auth/decorators/authMember.decorator';
+import { ObjectId } from 'mongoose';
+import { MemberType } from '../../libs/enums/member.enum';
+import { Roles } from '../auth/decorators/roles.decorator';
+import { RolesGuard } from '../auth/guards/roles.guard';
 
 
 @Resolver()
@@ -24,10 +30,27 @@ export class MemberResolver {
 
       ///  Authenticated  ( USER AGENT ADMIN )
 
+    @UseGuards(AuthGuard)
     @Mutation(() => String)
-    public async updateMember(): Promise<string> {
+    public async updateMember(@AuthMember("_id") memberId: ObjectId): Promise<string> {
         console.log("Mutation: updateMember");
         return this.memberService.updateMember();
+    }
+
+    @UseGuards(AuthGuard)
+    @Mutation(() => String)
+    public async checkAuth(@AuthMember('memberNick') memberNick: string): Promise<string> {
+        console.log('Quiery: checkAuth');
+        console.log('memberNick:', memberNick);
+        return `Hi ${memberNick}`;
+    }
+
+    @Roles(MemberType.USER, MemberType.AGENT)
+    @UseGuards(RolesGuard)
+    @Mutation(() => String)
+    public async checkAuthRoles(@AuthMember() authmember: Member): Promise<string> {
+        console.log('Quiery: checkAuthRoles');
+        return `Hi ${authmember.memberNick}, you are ${authmember.memberType} (memberId: ${authmember._id})`;
     }
 
     @Query(() => String)
@@ -38,7 +61,8 @@ export class MemberResolver {
 
     /* ADMIN */
 
-    // Authorization: ADMIN
+    @Roles(MemberType.ADMIN)
+    @UseGuards(RolesGuard)
     @Mutation(() => String)
     public async getAllMembersByAdmin(): Promise<string> {
         return this.memberService.getAllMembersByAdmin();

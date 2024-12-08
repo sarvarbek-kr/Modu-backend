@@ -2,8 +2,8 @@ export enum Message {
     SOMETHING_WENT_WRONG = 'Something went wrong!',
     N0_DATA_FOUND = 'No data found!',
     CREATE_FAILED = 'Create failed!',
-    UPDATE_FAILE = 'Update failed',
-    REMOVE_FAILE = 'Remove faile!',
+    UPDATE_FAILED = 'Update failed',
+    REMOVE_FAILED = 'Remove faile!',
     UPLOAD_FAILED = 'Upload failed',
     BAD_REQUEST = 'Bad request',
 

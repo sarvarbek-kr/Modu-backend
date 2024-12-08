@@ -3,9 +3,9 @@ import { InjectModel } from '@nestjs/mongoose';
 import { privateDecrypt } from 'crypto';
 import { Model, ObjectId } from 'mongoose';
 import { Member } from '../../libs/dto/member/member';
-import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
-import { MemberStatus } from '../../libs/enums/member.enum';
-import { Message } from '../../libs/enums/common.enum';
+import { AgentsInquiry, LoginInput, MemberInput } from '../../libs/dto/member/member.input';
+import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
+import { Direction, Message } from '../../libs/enums/common.enum';
 import { AuthService } from '../auth/auth.service';
 import { MemberUpdate } from '../../libs/dto/member/member.update';
 import { T } from '../../libs/types/common';
@@ -90,6 +90,27 @@ export class MemberService {
         return targetMember;
       }
 
+      public async getAgents(memberId: ObjectId, input: AgentsInquiry): Promise<string>{
+        const {text} = input.search;
+        const match: T = { memberType: MemberType.AGENT, memberStatus: MemberStatus.ACTIVE };
+        const sort: T = { [input?.sort ?? "createdAt"]: input?.direction ?? Direction.DESC };
+        if (text) match.memberNick = {$regex: new RegExp(text, "i")};
+        console.log("match:", match);
+
+        const result = await this.memberModel
+        .aggregate([
+          {$match: match},
+          {$sort: sort},
+          {
+            $facet: {
+              list: [{$skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
+              metaCounter: [{ $count: "total"}],
+            },
+          },
+        ]).exec();
+        console.log("result:", result);
+        return "getAgents executed!";
+      }
 
       public async getAllMembersByAdmin(): Promise<string>{
         return "getAllMembersByAdmin executed!";

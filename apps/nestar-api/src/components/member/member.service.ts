@@ -2,7 +2,7 @@ import { BadRequestException, Injectable, InternalServerErrorException } from '@
 import { InjectModel } from '@nestjs/mongoose';
 import { privateDecrypt } from 'crypto';
 import { Model, ObjectId } from 'mongoose';
-import { Member } from '../../libs/dto/member/member';
+import { Member, Members } from '../../libs/dto/member/member';
 import { AgentsInquiry, LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { MemberStatus, MemberType } from '../../libs/enums/member.enum';
 import { Direction, Message } from '../../libs/enums/common.enum';
@@ -90,7 +90,7 @@ export class MemberService {
         return targetMember;
       }
 
-      public async getAgents(memberId: ObjectId, input: AgentsInquiry): Promise<string>{
+      public async getAgents(memberId: ObjectId, input: AgentsInquiry): Promise<Members>{
         const {text} = input.search;
         const match: T = { memberType: MemberType.AGENT, memberStatus: MemberStatus.ACTIVE };
         const sort: T = { [input?.sort ?? "createdAt"]: input?.direction ?? Direction.DESC };
@@ -108,8 +108,8 @@ export class MemberService {
             },
           },
         ]).exec();
-        console.log("result:", result);
-        return "getAgents executed!";
+        if(!result.length) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
+        return result[0];
       }
 
       public async getAllMembersByAdmin(): Promise<string>{

@@ -13,7 +13,8 @@ import { ViewGroup } from '../../libs/enums/view.enum';
 
 @Injectable()
 export class MemberService {
-    constructor(@InjectModel("Member") private readonly memberModel: Model<Member>, 
+    constructor(
+      @InjectModel("Member") private readonly memberModel: Model<Member>, 
     private authService: AuthService,
     private viewService: ViewService,
   ) {}

@@ -12,6 +12,7 @@ import { ViewGroup } from '../../libs/enums/view.enum';
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
 import * as moment from 'moment';
 import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
+import { LoneSchemaDefinitionRule } from 'graphql';
 
 @Injectable()
 export class PropertyService {
@@ -120,7 +121,7 @@ export class PropertyService {
                     { $limit: input.limit },
                     //meLiked
                     lookupMember,
-                    { $unwind: '$memberData' },
+                    { $unwind: '$memberData' },  //[memberData] => memberData
                 ],
                 metaCounter: [{ $count: 'total' }],
             },
@@ -250,4 +251,15 @@ export class PropertyService {
     }
     return result;
  }
-}
+
+
+ public async removePropertyByAdmin(propertyId: ObjectId): Promise<Property> {
+    const search: T = { _id: propertyId, propertyStatus:PropertyStatus.DELETE };
+    console.log("search:", search);
+    const result = await this.propertyModel.findOneAndDelete(search).exec();
+    
+    if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
+
+    return result;
+  }
+} 

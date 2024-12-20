@@ -71,6 +71,9 @@ public async getBoardArticle(memberId: ObjectId, articleId: ObjectId): Promise<B
         });
         targetBoardArticle.articleViews++;
       }
+
+      const likeInput = {memberId: memberId, likeRefId: articleId, likeGroup: LikeGroup.ARTICLE };
+      targetBoardArticle.meLiked = await this.likeService.checkLikeExistence(likeInput);
     }
   
     // Fetch member data

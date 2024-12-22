@@ -61,4 +61,3 @@ export class FollowResolver {
     }
 }
 
-// 1 soat 7 minut qilindi

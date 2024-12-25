@@ -99,32 +99,34 @@ export class PropertyService {
 
    public async getProperties(memberId: ObjectId, input: PropertiesInquiry): Promise<Properties> {
     const match: T = { propertyStatus: PropertyStatus.ACTIVE };
-    const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC };
+    const sort: T = { [input?.sort ?? 'createdAt']: input?.direction ?? Direction.DESC};
 
     this.shapeMatchQuery(match, input);
-    console.log("match:", match);
+    console.log('match:', match);
+    
 
     const result = await this.propertyModel
     .aggregate([
         { $match: match },
         { $sort: sort },
         {
-            $facet:{
+            $facet: {
                 list: [
-                    { $skip: (input.page - 1) * input.limit },
-                    { $limit: input.limit },
+                    {$skip: (input.page - 1) * input.limit},
+                    {$limit: input.limit},
                     lookupAuthMemberLiked(memberId),
                     lookupMember,
-                    { $unwind: '$memberData' },  //[memberData] => memberData
+                    {$unwind: '$memberData'},
                 ],
-                metaCounter: [{ $count: 'total' }],
-            },
-        },
+                metaCounter: [{$count: 'total'}],
+            }
+        }
     ])
     .exec();
-    if (!result.length) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
+    if(!result.length) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
+    console.log("result:", result);
     return result[0];
-   }
+}
 
    private shapeMatchQuery(match: T, input: PropertiesInquiry): void {
     const {

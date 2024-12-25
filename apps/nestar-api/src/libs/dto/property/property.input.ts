@@ -114,11 +114,11 @@ class PISearch {
 
     @IsOptional()
     @Field(() => [Int], { nullable: true })
-    roomsList?: Number[];
+    roomsList?: number[];
 
     @IsOptional()
     @Field(() => [Int], { nullable: true })
-    bedsList?: Number[];
+    bedsList?: number[];
 
     @IsOptional()
     @IsIn(availableOptions, { each: true })

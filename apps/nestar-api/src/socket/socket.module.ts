@@ -7,4 +7,3 @@ import { SocketGateway } from './socket.gateway';
 export class SocketModule {}
 
 
-/// 23 minut hammasi togri negaur connection unsucsesfully

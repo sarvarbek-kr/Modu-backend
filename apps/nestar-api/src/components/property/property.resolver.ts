@@ -56,7 +56,7 @@ public async updateProperty(
 @UseGuards(WithoutGuard)
 @Query((returns) => Properties)
 public async getProperties(
-    @Args('input') input: PropertiesInquiry,
+    @Args('input') input: PropertiesInquiry,  
     @AuthMember('_id') memberId: ObjectId,
 ): Promise<Properties> {
     console.log('Query: getProperties');

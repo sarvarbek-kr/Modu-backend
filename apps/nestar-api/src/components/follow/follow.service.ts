@@ -49,7 +49,7 @@ public async unsubscribe(followerId: ObjectId, followingId: ObjectId): Promise<F
     const result = await this.followModel.findOneAndDelete({
         followingId: followingId,
         followerId: followerId,
-    });
+    }).exec();
     if (!result) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
 
     await this.memberService.memberStatsEditor({ _id: followerId, targetKey: 'memberFollowings', modifier: -1 });

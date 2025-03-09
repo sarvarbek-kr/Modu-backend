@@ -4,31 +4,31 @@
   "generateOptions": {
     "spec": false
   },
-  "sourceRoot": "apps/nestar-api/src",
+  "sourceRoot": "apps/modu-api/src",
   "compilerOptions": {
     "deleteOutDir": true,
     "webpack": true,
-    "tsConfigPath": "apps/nestar-api/tsconfig.app.json"
+    "tsConfigPath": "apps/modu-api/tsconfig.app.json"
   },
   "monorepo": true,
-  "root": "apps/nestar-api",
+  "root": "apps/modu-api",
   "projects": {
-    "nestar-api": {
+    "modu-api": {
       "type": "application",
-      "root": "apps/nestar-api",
+      "root": "apps/modu-api",
       "entryFile": "main",
-      "sourceRoot": "apps/nestar-api/src",
+      "sourceRoot": "apps/modu-api/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/nestar-api/tsconfig.app.json"
+        "tsConfigPath": "apps/modu-api/tsconfig.app.json"
       }
     },
-    "nestar-batch": {
+    "modu-batch": {
       "type": "application",
-      "root": "apps/nestar-batch",
+      "root": "apps/modu-batch",
       "entryFile": "main",
-      "sourceRoot": "apps/nestar-batch/src",
+      "sourceRoot": "apps/modu-batch/src",
       "compilerOptions": {
-        "tsConfigPath": "apps/nestar-batch/tsconfig.app.json"
+        "tsConfigPath": "apps/modu-batch/tsconfig.app.json"
       }
     }
   }

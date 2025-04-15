@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { MemberModule } from './member/member.module';
-import { PropertyModule } from './property/property.module';
+import { FurnitureModule } from './furniture/furniture.module';
 import { AuthModule } from './auth/auth.module';
 import { CommentModule } from './comment/comment.module';
 import { LikeModule } from './like/like.module';
@@ -9,16 +9,15 @@ import { FollowModule } from './follow/follow.module';
 import { BoardArticleModule } from './board-article/board-article.module';
 
 @Module({
-  imports: [
-    MemberModule,  
-    AuthModule, 
-    PropertyModule,
-    BoardArticleModule,
-    LikeModule, 
-    ViewModule,  
-    CommentModule,
-    FollowModule, 
-    
-  ],
+	imports: [
+		MemberModule,
+		AuthModule,
+		FurnitureModule,
+		BoardArticleModule,
+		LikeModule,
+		ViewModule,
+		CommentModule,
+		FollowModule,
+	],
 })
 export class ComponentsModule {}

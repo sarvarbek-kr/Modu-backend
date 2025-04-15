@@ -1,91 +1,91 @@
 import { Schema } from 'mongoose';
-import { PropertyLocation, PropertyStatus, PropertyType } from '../libs/enums/property.enum';
+import { FurnitureLocation, FurnitureStatus, FurnitureType } from '../libs/enums/furniture.enum';
 
-const PropertySchema = new Schema(
+const FurnitureSchema = new Schema(
 	{
-		propertyType: {
+		furnitureType: {
 			type: String,
-			enum: PropertyType,
+			enum: FurnitureType,
 			required: true,
 		},
 
-		propertyStatus: {
+		furnitureStatus: {
 			type: String,
-			enum: PropertyStatus,
-			default: PropertyStatus.ACTIVE,
+			enum: FurnitureStatus,
+			default: FurnitureStatus.ACTIVE,
 		},
 
-		propertyLocation: {
+		furnitureLocation: {
 			type: String,
-			enum: PropertyLocation,
+			enum: FurnitureLocation,
 			required: true,
 		},
 
-		propertyAddress: {
-			type: String,
-			required: true,
-		},
-
-		propertyTitle: {
+		furnitureAddress: {
 			type: String,
 			required: true,
 		},
 
-		propertyPrice: {
+		furnitureTitle: {
+			type: String,
+			required: true,
+		},
+
+		furniturePrice: {
 			type: Number,
 			required: true,
 		},
 
-		propertySquare: {
+		furnitureSquare: {
 			type: Number,
 			required: true,
 		},
 
-		propertyBeds: {
+		furnitureBeds: {
 			type: Number,
 			required: true,
 		},
 
-		propertyRooms: {
+		furnitureRooms: {
 			type: Number,
 			required: true,
 		},
 
-		propertyViews: {
+		furnitureViews: {
 			type: Number,
 			default: 0,
 		},
 
-		propertyLikes: {
+		furnitureLikes: {
 			type: Number,
 			default: 0,
 		},
 
-		propertyComments: {
+		furnitureComments: {
 			type: Number,
 			default: 0,
 		},
 
-		propertyRank: {
+		furnitureRank: {
 			type: Number,
 			default: 0,
 		},
 
-		propertyImages: {
+		furnitureImages: {
 			type: [String],
 			required: true,
 		},
 
-		propertyDesc: {
+		furnitureDesc: {
 			type: String,
 		},
 
-		propertyBarter: {
+		furnitureBarter: {
 			type: Boolean,
 			default: false,
 		},
 
-		propertyRent: {
+		furnitureRent: {
 			type: Boolean,
 			default: false,
 		},
@@ -108,9 +108,12 @@ const PropertySchema = new Schema(
 			type: Date,
 		},
 	},
-	{ timestamps: true, collection: 'properties' },
+	{ timestamps: true, collection: 'furnitures' },
 );
 
-PropertySchema.index({ propertyType: 1, propertyLocation: 1, propertyTitle: 1, propertyPrice: 1 }, { unique: true });
+FurnitureSchema.index(
+	{ furnitureType: 1, furnitureLocation: 1, furnitureTitle: 1, furniturePrice: 1 },
+	{ unique: true },
+);
 
-export default PropertySchema;
+export default FurnitureSchema;

@@ -1,7 +1,27 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
 import { IsInt, IsNotEmpty, IsOptional, Length, Min } from 'class-validator';
-import { FurnitureLocation, FurnitureStatus, FurnitureType } from '../../enums/furniture.enum';
+import {
+	FurnitureBrand,
+	FurnitureColor,
+	FurnitureCondition,
+	FurnitureLocation,
+	FurnitureMaterial,
+	FurnitureStatus,
+	FurnitureType,
+} from '../../enums/furniture.enum';
 import { ObjectId } from 'mongoose';
+
+@InputType()
+export class FurnitureDimensionsUpdate {
+	@Field(() => Int)
+	width: number;
+
+	@Field(() => Int)
+	height: number;
+
+	@Field(() => Int)
+	depth: number;
+}
 
 @InputType()
 export class FurnitureUpdate {
@@ -21,10 +41,20 @@ export class FurnitureUpdate {
 	@Field(() => FurnitureLocation, { nullable: true })
 	furnitureLocation?: FurnitureLocation;
 
-	@IsOptional()
-	@Length(3, 100)
-	@Field(() => String, { nullable: true })
-	furnitureAddress?: string;
+	@Field(() => FurnitureCondition)
+	furnitureCondition?: FurnitureCondition;
+
+	@Field(() => FurnitureDimensionsUpdate)
+	furnitureDimensions?: FurnitureDimensionsUpdate;
+
+	@Field(() => FurnitureColor)
+	furnitureColor?: FurnitureColor;
+
+	@Field(() => FurnitureMaterial)
+	furnitureMaterial?: FurnitureMaterial;
+
+	@Field(() => FurnitureBrand)
+	furnitureBrand?: FurnitureBrand;
 
 	@IsOptional()
 	@Length(3, 100)
@@ -34,22 +64,6 @@ export class FurnitureUpdate {
 	@IsOptional()
 	@Field(() => Number, { nullable: true })
 	furniturePrice?: number;
-
-	@IsOptional()
-	@Field(() => Number, { nullable: true })
-	furnitureSquare?: number;
-
-	@IsOptional()
-	@IsInt()
-	@Min(1)
-	@Field(() => Int, { nullable: true })
-	furnitureBeds?: number;
-
-	@IsOptional()
-	@IsInt()
-	@Min(1)
-	@Field(() => Int, { nullable: true })
-	furnitureRooms?: number;
 
 	@IsOptional()
 	@Field(() => [String], { nullable: true })
@@ -63,10 +77,6 @@ export class FurnitureUpdate {
 	@IsOptional()
 	@Field(() => Boolean, { nullable: true })
 	furnitureBarter?: boolean;
-
-	@IsOptional()
-	@Field(() => Boolean, { nullable: true })
-	furnitureRent?: boolean;
 
 	soldAt?: Date;
 

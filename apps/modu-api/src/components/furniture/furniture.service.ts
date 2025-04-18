@@ -130,18 +130,8 @@ export class FurnitureService {
 	}
 
 	private shapeMatchQuery(match: T, input: FurnituresInquiry): void {
-		const {
-			memberId,
-			locationList,
-			roomsList,
-			bedsList,
-			typeList,
-			periodsRange,
-			pricesRange,
-			squaresRange,
-			options,
-			text,
-		} = input.search;
+		const { memberId, locationList, roomsList, bedsList, typeList, periodsRange, pricesRange, options, text } =
+			input.search;
 		if (memberId) match.memberId = shapeIntoMongoObjectId(memberId);
 		if (locationList && locationList.length) match.furnitureLocation = { $in: locationList };
 		if (roomsList && roomsList.length) match.furnitureRooms = { $in: roomsList };
@@ -150,7 +140,6 @@ export class FurnitureService {
 
 		if (pricesRange) match.furniturePrice = { $gte: pricesRange.start, $lte: pricesRange.end };
 		if (periodsRange) match.createdAt = { $gte: periodsRange.start, $lte: periodsRange.end };
-		if (squaresRange) match.furnitureSquare = { $gte: squaresRange.start, $lte: squaresRange.end };
 
 		if (text) match.furnitureTitle = { $regex: new RegExp(text, 'i') };
 		if (options) {

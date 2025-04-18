@@ -1,8 +1,28 @@
 import { Field, Int, ObjectType } from '@nestjs/graphql';
 import { ObjectId } from 'mongoose';
-import { FurnitureLocation, FurnitureStatus, FurnitureType } from '../../enums/furniture.enum';
+import {
+	FurnitureBrand,
+	FurnitureColor,
+	FurnitureCondition,
+	FurnitureLocation,
+	FurnitureMaterial,
+	FurnitureStatus,
+	FurnitureType,
+} from '../../enums/furniture.enum';
 import { Member, TotalCounter } from '../member/member';
 import { MeLiked } from '../like/like';
+
+@ObjectType()
+export class FurnitureDimensions {
+	@Field(() => Int)
+	width: number;
+
+	@Field(() => Int)
+	height: number;
+
+	@Field(() => Int)
+	depth: number;
+}
 
 @ObjectType()
 export class Furniture {
@@ -13,28 +33,31 @@ export class Furniture {
 	furnitureType: FurnitureType;
 
 	@Field(() => FurnitureStatus)
-	furnitureStatus?: FurnitureStatus;
+	furnitureStatus: FurnitureStatus;
 
 	@Field(() => FurnitureLocation)
 	furnitureLocation: FurnitureLocation;
 
-	@Field(() => String)
-	furnitureAddress: string;
+	@Field(() => FurnitureCondition)
+	furnitureCondition: FurnitureCondition;
+
+	@Field(() => FurnitureDimensions)
+	furnitureDimensions: FurnitureDimensions;
+
+	@Field(() => FurnitureColor)
+	furnitureColor: FurnitureColor;
+
+	@Field(() => FurnitureMaterial)
+	furnitureMaterial: FurnitureMaterial;
+
+	@Field(() => FurnitureBrand)
+	furnitureBrand: FurnitureBrand;
 
 	@Field(() => String)
 	furnitureTitle: string;
 
 	@Field(() => Number)
 	furniturePrice: number;
-
-	@Field(() => Number)
-	furnitureSquare: number;
-
-	@Field(() => Int)
-	furnitureBeds: number;
-
-	@Field(() => Int)
-	furnitureRooms: number;
 
 	@Field(() => Int)
 	furnitureViews: number;
@@ -56,9 +79,6 @@ export class Furniture {
 
 	@Field(() => Boolean)
 	furnitureBarter: boolean;
-
-	@Field(() => Boolean)
-	furnitureRent: boolean;
 
 	@Field(() => String)
 	memberId: ObjectId;

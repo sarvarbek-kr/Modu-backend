@@ -1,9 +1,36 @@
 import { Field, InputType, Int } from '@nestjs/graphql';
-import { IsIn, IsInt, IsNotEmpty, IsOptional, Length, Min } from 'class-validator';
-import { FurnitureLocation, FurnitureStatus, FurnitureType } from '../../enums/furniture.enum';
+import { IsIn, IsInt, IsNotEmpty, IsOptional, Length, Min, IsObject, ValidateNested } from 'class-validator';
+import {
+	FurnitureLocation,
+	FurnitureStatus,
+	FurnitureType,
+	FurnitureCondition,
+	FurnitureColor,
+	FurnitureMaterial,
+	FurnitureBrand,
+} from '../../enums/furniture.enum';
 import { ObjectId } from 'mongoose';
 import { Direction } from '../../enums/common.enum';
 import { availableOptions, availableFurnitureSorts } from '../../config';
+import { Type } from 'class-transformer';
+
+@InputType()
+class FurnitureDimensionsInput {
+	@Min(1)
+	@IsInt()
+	@Field(() => Int)
+	width: number;
+
+	@Min(1)
+	@IsInt()
+	@Field(() => Int)
+	height: number;
+
+	@Min(1)
+	@IsInt()
+	@Field(() => Int)
+	depth: number;
+}
 
 @InputType()
 export class FurnitureInput {
@@ -14,6 +41,29 @@ export class FurnitureInput {
 	@IsNotEmpty()
 	@Field(() => FurnitureLocation)
 	furnitureLocation: FurnitureLocation;
+
+	@IsNotEmpty()
+	@Field(() => FurnitureCondition, { defaultValue: FurnitureCondition.NEW })
+	furnitureCondition: FurnitureCondition;
+
+	@IsNotEmpty()
+	@IsObject()
+	@ValidateNested()
+	@Type(() => FurnitureDimensionsInput)
+	@Field(() => FurnitureDimensionsInput)
+	furnitureDimensions: FurnitureDimensionsInput;
+
+	@IsOptional()
+	@Field(() => FurnitureColor)
+	furnitureColor: FurnitureColor;
+
+	@IsOptional()
+	@Field(() => FurnitureMaterial)
+	furnitureMaterial: FurnitureMaterial;
+
+	@IsOptional()
+	@Field(() => FurnitureBrand)
+	furnitureBrand: FurnitureBrand;
 
 	@IsNotEmpty()
 	@Length(3, 100)
@@ -28,10 +78,6 @@ export class FurnitureInput {
 	@IsNotEmpty()
 	@Field(() => Number)
 	furniturePrice: number;
-
-	@IsNotEmpty()
-	@Field(() => Number)
-	furnitureSquare: number;
 
 	@IsNotEmpty()
 	@IsInt()
@@ -58,10 +104,6 @@ export class FurnitureInput {
 	@Field(() => Boolean, { nullable: true })
 	furnitureBarter?: boolean;
 
-	@IsOptional()
-	@Field(() => Boolean, { nullable: true })
-	furnitureRent?: boolean;
-
 	memberId?: ObjectId;
 
 	@IsOptional()
@@ -71,15 +113,6 @@ export class FurnitureInput {
 
 @InputType()
 export class PricesRange {
-	@Field(() => Int)
-	start: number;
-
-	@Field(() => Int)
-	end: number;
-}
-
-@InputType()
-export class SquaresRange {
 	@Field(() => Int)
 	start: number;
 
@@ -130,10 +163,6 @@ class PISearch {
 	@IsOptional()
 	@Field(() => PeriodsRange, { nullable: true })
 	periodsRange?: PeriodsRange;
-
-	@IsOptional()
-	@Field(() => SquaresRange, { nullable: true })
-	squaresRange?: SquaresRange;
 
 	@IsOptional()
 	@Field(() => String, { nullable: true })

@@ -1,5 +1,13 @@
 import { Schema } from 'mongoose';
-import { FurnitureLocation, FurnitureStatus, FurnitureType } from '../libs/enums/furniture.enum';
+import {
+	FurnitureBrand,
+	FurnitureColor,
+	FurnitureCondition,
+	FurnitureLocation,
+	FurnitureMaterial,
+	FurnitureStatus,
+	FurnitureType,
+} from '../libs/enums/furniture.enum';
 
 const FurnitureSchema = new Schema(
 	{
@@ -7,6 +15,11 @@ const FurnitureSchema = new Schema(
 			type: String,
 			enum: FurnitureType,
 			required: true,
+		},
+
+		furnitureCondition: {
+			type: String,
+			enum: FurnitureCondition,
 		},
 
 		furnitureStatus: {
@@ -21,8 +34,21 @@ const FurnitureSchema = new Schema(
 			required: true,
 		},
 
-		furnitureAddress: {
+		furnitureColor: {
 			type: String,
+			enum: FurnitureColor,
+			required: true,
+		},
+
+		furnitureMaterial: {
+			type: String,
+			enum: FurnitureMaterial,
+			required: true,
+		},
+
+		furnitureBrand: {
+			type: String,
+			enum: FurnitureBrand,
 			required: true,
 		},
 
@@ -32,21 +58,6 @@ const FurnitureSchema = new Schema(
 		},
 
 		furniturePrice: {
-			type: Number,
-			required: true,
-		},
-
-		furnitureSquare: {
-			type: Number,
-			required: true,
-		},
-
-		furnitureBeds: {
-			type: Number,
-			required: true,
-		},
-
-		furnitureRooms: {
 			type: Number,
 			required: true,
 		},
@@ -81,11 +92,6 @@ const FurnitureSchema = new Schema(
 		},
 
 		furnitureBarter: {
-			type: Boolean,
-			default: false,
-		},
-
-		furnitureRent: {
 			type: Boolean,
 			default: false,
 		},

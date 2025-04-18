@@ -80,18 +80,6 @@ export class FurnitureInput {
 	furniturePrice: number;
 
 	@IsNotEmpty()
-	@IsInt()
-	@Min(1)
-	@Field(() => Int)
-	furnitureBeds: number;
-
-	@IsNotEmpty()
-	@IsInt()
-	@Min(1)
-	@Field(() => Int)
-	furnitureRooms: number;
-
-	@IsNotEmpty()
 	@Field(() => [String])
 	furnitureImages: string[];
 

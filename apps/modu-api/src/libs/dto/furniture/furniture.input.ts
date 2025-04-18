@@ -144,12 +144,24 @@ class PISearch {
 	typeList?: FurnitureType[];
 
 	@IsOptional()
-	@Field(() => [Int], { nullable: true })
-	roomsList?: number[];
+	@Field(() => [FurnitureCondition], { nullable: true })
+	conditionList?: FurnitureCondition[];
 
 	@IsOptional()
-	@Field(() => [Int], { nullable: true })
-	bedsList?: number[];
+	@Field(() => [FurnitureDimensionsInput], { nullable: true })
+	dimensionsList?: FurnitureDimensionsInput[];
+
+	@IsOptional()
+	@Field(() => [FurnitureColor], { nullable: true })
+	colorList?: FurnitureColor[];
+
+	@IsOptional()
+	@Field(() => [FurnitureMaterial], { nullable: true })
+	materialList?: FurnitureMaterial[];
+
+	@IsOptional()
+	@Field(() => [FurnitureBrand], { nullable: true })
+	brandList?: FurnitureBrand[];
 
 	@IsOptional()
 	@IsIn(availableOptions, { each: true })

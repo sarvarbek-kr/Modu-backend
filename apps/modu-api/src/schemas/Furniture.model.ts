@@ -17,6 +17,15 @@ const FurnitureSchema = new Schema(
 			required: true,
 		},
 
+		furnitureDimensions: {
+			type: {
+				width: { type: Number, required: true },
+				height: { type: Number, required: true },
+				depth: { type: Number, required: true },
+			},
+			required: true,
+		},
+
 		furnitureCondition: {
 			type: String,
 			enum: FurnitureCondition,

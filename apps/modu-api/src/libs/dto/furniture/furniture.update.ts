@@ -41,19 +41,19 @@ export class FurnitureUpdate {
 	@Field(() => FurnitureLocation, { nullable: true })
 	furnitureLocation?: FurnitureLocation;
 
-	@Field(() => FurnitureCondition)
+	@Field(() => FurnitureCondition, { nullable: true })
 	furnitureCondition?: FurnitureCondition;
 
-	@Field(() => FurnitureDimensionsUpdate)
+	@Field(() => FurnitureDimensionsUpdate, { nullable: true })
 	furnitureDimensions?: FurnitureDimensionsUpdate;
 
-	@Field(() => FurnitureColor)
+	@Field(() => FurnitureColor, { nullable: true })
 	furnitureColor?: FurnitureColor;
 
-	@Field(() => FurnitureMaterial)
+	@Field(() => FurnitureMaterial, { nullable: true })
 	furnitureMaterial?: FurnitureMaterial;
 
-	@Field(() => FurnitureBrand)
+	@Field(() => FurnitureBrand, { nullable: true })
 	furnitureBrand?: FurnitureBrand;
 
 	@IsOptional()

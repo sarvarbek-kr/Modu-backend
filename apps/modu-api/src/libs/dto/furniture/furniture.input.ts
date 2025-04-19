@@ -43,12 +43,11 @@ export class FurnitureInput {
 	furnitureLocation: FurnitureLocation;
 
 	@IsNotEmpty()
-	@Field(() => FurnitureCondition, { defaultValue: FurnitureCondition.NEW })
+	@Field(() => FurnitureCondition)
 	furnitureCondition: FurnitureCondition;
 
 	@IsNotEmpty()
 	@IsObject()
-	@ValidateNested()
 	@Type(() => FurnitureDimensionsInput)
 	@Field(() => FurnitureDimensionsInput)
 	furnitureDimensions: FurnitureDimensionsInput;
@@ -68,19 +67,14 @@ export class FurnitureInput {
 	@IsNotEmpty()
 	@Length(3, 100)
 	@Field(() => String)
-	furnitureAddress: string;
-
-	@IsNotEmpty()
-	@Length(3, 100)
-	@Field(() => String)
 	furnitureTitle: string;
 
 	@IsNotEmpty()
 	@Field(() => Number)
 	furniturePrice: number;
 
-	@IsNotEmpty()
-	@Field(() => [String])
+	@IsOptional()
+	@Field(() => [String], { nullable: true })
 	furnitureImages: string[];
 
 	@IsOptional()

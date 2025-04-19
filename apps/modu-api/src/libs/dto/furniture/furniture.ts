@@ -71,7 +71,7 @@ export class Furniture {
 	@Field(() => Int)
 	furnitureRank: number;
 
-	@Field(() => [String])
+	@Field(() => [String], { nullable: true })
 	furnitureImages: string[];
 
 	@Field(() => String, { nullable: true })

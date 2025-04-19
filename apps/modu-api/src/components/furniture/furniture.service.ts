@@ -146,11 +146,11 @@ export class FurnitureService {
 		} = input.search;
 		if (memberId) match.memberId = shapeIntoMongoObjectId(memberId);
 		if (locationList && locationList.length) match.furnitureLocation = { $in: locationList };
-		if (conditionList && conditionList.length) match.conditionList = { $in: conditionList };
-		if (dimensionsList && dimensionsList.length) match.dimensionsList = { $in: dimensionsList };
-		if (colorList && colorList.length) match.colorList = { $in: colorList };
-		if (materialList && materialList.length) match.materialList = { $in: materialList };
-		if (brandList && brandList.length) match.brandList = { $in: brandList };
+		if (conditionList && conditionList.length) match.furnitureCondition = { $in: conditionList };
+		if (dimensionsList && dimensionsList.length) match.furnitureDimensions = { $in: dimensionsList };
+		if (colorList && colorList.length) match.furnitureColor = { $in: colorList };
+		if (materialList && materialList.length) match.furnitureMaterial = { $in: materialList };
+		if (brandList && brandList.length) match.furnitureBrand = { $in: brandList };
 		if (typeList && typeList.length) match.furnitureType = { $in: typeList };
 
 		if (pricesRange) match.furniturePrice = { $gte: pricesRange.start, $lte: pricesRange.end };

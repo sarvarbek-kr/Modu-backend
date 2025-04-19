@@ -67,6 +67,7 @@ registerEnumType(FurnitureColor, {
 export enum FurnitureMaterial {
 	WOOD = 'WOOD',
 	METAL = 'METAL',
+	LEATHER = 'LEATHER',
 	GLASS = 'GLASS',
 	PLASTIC = 'PLASTIC',
 	FABRIC = 'FABRIC',

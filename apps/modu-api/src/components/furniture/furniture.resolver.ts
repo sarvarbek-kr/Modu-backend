@@ -102,7 +102,7 @@ export class FurnitureResolver {
 	@UseGuards(AuthGuard)
 	@Mutation(() => Furniture)
 	public async likeTargetFurniture(
-		@Args('FurnitureId') input: string,
+		@Args('furnitureId') input: string,
 		@AuthMember('_id') memberId: ObjectId,
 	): Promise<Furniture> {
 		console.log('Mutation: likeTargetFurniture');

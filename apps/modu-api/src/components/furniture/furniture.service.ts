@@ -157,7 +157,7 @@ export class FurnitureService {
 		if (periodsRange) match.createdAt = { $gte: periodsRange.start, $lte: periodsRange.end };
 
 		if (text) match.furnitureTitle = { $regex: new RegExp(text, 'i') };
-		if (options) {
+		if (options && options.length > 0) {
 			match['$or'] = options.map((ele) => {
 				return { [ele]: true };
 			});

@@ -139,6 +139,6 @@ export const lookupVisit = {
 		from: 'members',
 		localField: 'visitedFurniture.memberId',
 		foreignField: '_id',
-		as: 'visitedfurniture.memberData',
+		as: 'visitedFurniture.memberData',
 	},
 };

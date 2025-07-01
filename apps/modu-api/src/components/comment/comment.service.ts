@@ -10,7 +10,10 @@ import { CommentGroup, CommentStatus } from '../../libs/enums/comment.enum';
 import { Comments, Comment } from '../../libs/dto/comment/comment';
 import { CommentUpdate } from '../../libs/dto/comment/comment.update';
 import { T } from '../../libs/types/common';
-import { lookupMember } from '../../libs/config';
+import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationInput } from '../../libs/dto/notification/notification.input';
+import { NotificationGroup, NotificationType } from '../../libs/enums/notification.enum';
 
 @Injectable()
 export class CommentService {
@@ -19,10 +22,12 @@ export class CommentService {
 		private readonly memberService: MemberService,
 		private readonly furnitureService: FurnitureService,
 		private readonly boardArticleService: BoardArticleService,
+		private notificationService: NotificationService,
 	) {}
 
 	public async createComment(memberId: ObjectId, input: CommentInput): Promise<Comment> {
 		input.memberId = memberId;
+		input.commentRefId = shapeIntoMongoObjectId(input.commentRefId);
 
 		let result = null;
 		try {
@@ -31,6 +36,18 @@ export class CommentService {
 			console.log('Error, Service.model:', err.message);
 			throw new BadRequestException(Message.CREATE_FAILED);
 		}
+
+		const notifInput: NotificationInput = {
+			notificationGroup: null,
+			notificationType: NotificationType.COMMENT,
+			notificationTitle: '',
+			notificationDesc: '',
+			authorId: memberId,
+			receiverId: null,
+		};
+
+		let target: any;
+
 		switch (input.commentGroup) {
 			case CommentGroup.FURNITURE:
 				await this.furnitureService.furnitureStatsEditor({
@@ -38,6 +55,11 @@ export class CommentService {
 					targetKey: 'furnitureComments',
 					modifier: 1,
 				});
+				notifInput.notificationGroup = NotificationGroup.FURNITURE;
+				notifInput.notificationTitle = 'Furniture Comment!';
+				notifInput.notificationDesc = 'Someone commented on your furniture!';
+				notifInput.receiverId = target.memberId;
+				notifInput.propertyId = input.commentRefId;
 				break;
 			case CommentGroup.ARTICLE:
 				await this.boardArticleService.boardArticleStatsEditor({
@@ -45,6 +67,11 @@ export class CommentService {
 					targetKey: 'articleComments',
 					modifier: 1,
 				});
+				notifInput.notificationGroup = NotificationGroup.ARTICLE;
+				notifInput.notificationTitle = 'Article Comment!';
+				notifInput.notificationDesc = 'Someone commented on your article!';
+				notifInput.receiverId = target.memberId;
+				notifInput.articleId = input.commentRefId;
 				break;
 			case CommentGroup.MEMBER:
 				await this.memberService.memberStatsEditor({
@@ -52,8 +79,13 @@ export class CommentService {
 					targetKey: 'memberComments',
 					modifier: 1,
 				});
+				notifInput.notificationGroup = NotificationGroup.MEMBER;
+				notifInput.notificationTitle = 'Profile Comment!';
+				notifInput.notificationDesc = 'Someone commented on your profile!';
+				notifInput.receiverId = input.commentRefId;
 				break;
 		}
+		await this.notificationService.createNotification(notifInput);
 		if (!result) throw new InternalServerErrorException(Message.CREATE_FAILED);
 		return result;
 	}

@@ -7,7 +7,7 @@ import { T } from '../../libs/types/common';
 import { OrdinaryInquiry } from '../../libs/dto/furniture/furniture.input';
 import { Furnitures } from '../../libs/dto/furniture/furniture';
 import { ViewGroup } from '../../libs/enums/view.enum';
-import { lookupVisit } from '../../libs/config';
+import { lookupVisited } from '../../libs/config';
 
 @Injectable()
 export class ViewService {
@@ -51,7 +51,7 @@ export class ViewService {
 						list: [
 							{ $skip: (page - 1) * limit },
 							{ $limit: limit },
-							lookupVisit,
+							lookupVisited,
 							{ $unwind: '$visitedFurniture.memberData' },
 						],
 						metaCounter: [{ $count: 'total' }],

@@ -1,5 +1,7 @@
 import { ObjectId } from 'bson';
+import * as crypto from 'crypto';
 
+export const CACHE_TTL = 3600;
 export const availableAgentSorts = ['createdAt', 'updatedAt', 'memberLikes', 'memberViews', 'memberRank'];
 export const availableMemberSorts = ['createdAt', 'updatedAt', 'memberLikes', 'memberViews'];
 export const availableOptions = ['furnitureBarter'];
@@ -134,11 +136,14 @@ export const lookupFavarite = {
 	},
 };
 
-export const lookupVisit = {
+export const lookupVisited = {
 	$lookup: {
 		from: 'members',
 		localField: 'visitedFurniture.memberId',
 		foreignField: '_id',
 		as: 'visitedFurniture.memberData',
 	},
+};
+export const hashCacheKey = (longStringKey: string): string => {
+	return crypto.createHash('md5').update(longStringKey).digest('hex');
 };

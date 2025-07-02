@@ -28,13 +28,12 @@ export class CommentService {
 	public async createComment(memberId: ObjectId, input: CommentInput): Promise<Comment> {
 		input.memberId = memberId;
 		input.commentRefId = shapeIntoMongoObjectId(input.commentRefId);
-
 		let result = null;
 		try {
 			result = await this.commentModel.create(input);
 		} catch (err) {
-			console.log('Error, Service.model:', err.message);
-			throw new BadRequestException(Message.CREATE_FAILED);
+			console.log('Comment Service Error: createComment', err);
+			throw new InternalServerErrorException(Message.CREATE_FAILED);
 		}
 
 		const notifInput: NotificationInput = {
@@ -47,22 +46,22 @@ export class CommentService {
 		};
 
 		let target: any;
-
 		switch (input.commentGroup) {
 			case CommentGroup.FURNITURE:
-				await this.furnitureService.furnitureStatsEditor({
+				target = await this.furnitureService.furnitureStatsEditor({
 					_id: input.commentRefId,
-					targetKey: 'furnitureComments',
+					targetKey: 'propertyComments',
 					modifier: 1,
 				});
 				notifInput.notificationGroup = NotificationGroup.FURNITURE;
-				notifInput.notificationTitle = 'Furniture Comment!';
-				notifInput.notificationDesc = 'Someone commented on your furniture!';
+				notifInput.notificationTitle = 'Property Comment!';
+				notifInput.notificationDesc = 'Someone commented on your property!';
 				notifInput.receiverId = target.memberId;
 				notifInput.propertyId = input.commentRefId;
+
 				break;
 			case CommentGroup.ARTICLE:
-				await this.boardArticleService.boardArticleStatsEditor({
+				target = await this.boardArticleService.boardArticleStatsEditor({
 					_id: input.commentRefId,
 					targetKey: 'articleComments',
 					modifier: 1,
@@ -86,6 +85,7 @@ export class CommentService {
 				break;
 		}
 		await this.notificationService.createNotification(notifInput);
+
 		if (!result) throw new InternalServerErrorException(Message.CREATE_FAILED);
 		return result;
 	}

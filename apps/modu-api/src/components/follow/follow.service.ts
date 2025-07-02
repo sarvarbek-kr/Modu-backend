@@ -50,14 +50,14 @@ export class FollowService {
 		return result;
 	}
 
-	public async registerSubscription(followerId: ObjectId, followingId: ObjectId): Promise<Follower> {
+	private async registerSubscription(followerId: ObjectId, followingId: ObjectId): Promise<Follower> {
 		try {
 			return await this.followModel.create({
-				followingId: followingId,
-				followerId: followerId,
+				followingId,
+				followerId,
 			});
 		} catch (err) {
-			console.log('Error, Service.model:', err.message);
+			console.log('Error, Follow Service: registerSubscription');
 			throw new BadRequestException(Message.CREATE_FAILED);
 		}
 	}

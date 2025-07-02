@@ -91,21 +91,39 @@ export class CommentService {
 	}
 
 	public async updateComment(memberId: ObjectId, input: CommentUpdate): Promise<Comment> {
-		const { _id } = input;
-		const result = await this.commentModel
-			.findOneAndUpdate(
-				{
-					_id: _id,
-					memberId: memberId,
-					commentStatus: CommentStatus.ACTIVE,
-				},
-				input,
-				{
-					new: true,
-				},
-			)
-			.exec();
+		const search: T = {
+			_id: input._id,
+			memberId: memberId,
+			commentStatus: CommentStatus.ACTIVE,
+		};
+		const { commentStatus } = input;
+		const result = await this.commentModel.findOneAndUpdate(search, input, { new: true }).exec();
 		if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
+		if (commentStatus === CommentStatus.DELETE) {
+			switch (result.commentGroup) {
+				case CommentGroup.FURNITURE:
+					await this.furnitureService.furnitureStatsEditor({
+						_id: result.commentRefId,
+						targetKey: 'furnitureComments',
+						modifier: -1,
+					});
+					break;
+				case CommentGroup.ARTICLE:
+					await this.boardArticleService.boardArticleStatsEditor({
+						_id: result.commentRefId,
+						targetKey: 'articleComments',
+						modifier: -1,
+					});
+					break;
+				case CommentGroup.MEMBER:
+					await this.memberService.memberStatsEditor({
+						_id: result.commentRefId,
+						targetKey: 'memberComments',
+						modifier: -1,
+					});
+					break;
+			}
+		}
 		return result;
 	}
 

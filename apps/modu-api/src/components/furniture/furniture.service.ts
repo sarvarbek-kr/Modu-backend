@@ -21,6 +21,9 @@ import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjectId } from '../
 import { LikeService } from '../like/like.service';
 import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
+import { NotificationService } from '../notification/notification.service';
+import { NotificationInput } from '../../libs/dto/notification/notification.input';
+import { NotificationGroup, NotificationType } from '../../libs/enums/notification.enum';
 
 @Injectable()
 export class FurnitureService {
@@ -29,6 +32,7 @@ export class FurnitureService {
 		private memberService: MemberService,
 		private viewService: ViewService,
 		private likeService: LikeService,
+		private notificationService: NotificationService,
 	) {}
 
 	public async createFurniture(input: FurnitureInput): Promise<Furniture> {
@@ -59,7 +63,7 @@ export class FurnitureService {
 			const viewInput = { memberId: memberId, viewRefId: furnitureId, viewGroup: ViewGroup.FURNITURE };
 			const newView = await this.viewService.recordView(viewInput);
 			if (newView) {
-				await this.furnitureStatsEditor({ _id: furnitureId, targetKey: 'furnitureViews', modifier: 1 });
+				await this.furnitureModel.findByIdAndUpdate(furnitureId, { $inc: { furnitureViews: 1 } }, { new: true }).exec();
 				targetFurniture.furnitureViews++;
 			}
 
@@ -217,6 +221,18 @@ export class FurnitureService {
 
 		const modifier: number = await this.likeService.toggleLike(input);
 		const result = await this.furnitureStatsEditor({ _id: likeRefId, targetKey: 'furnitureLikes', modifier: modifier });
+		if (modifier === 1) {
+			const notifInput: NotificationInput = {
+				notificationGroup: NotificationGroup.FURNITURE,
+				notificationType: NotificationType.LIKE,
+				notificationTitle: 'Property Liked!',
+				notificationDesc: 'Someone liked your property!',
+				authorId: memberId,
+				receiverId: target.memberId,
+				propertyId: likeRefId,
+			};
+			await this.notificationService.createNotification(notifInput);
+		}
 
 		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;

@@ -4,7 +4,7 @@ services:
     restart: always
     image: node:20
     ports:
-      - '3009-3009'
+      - '3009:3009'
     volumes:
       - ./:/usr/src/modu
     working_dir: /usr/src/modu
@@ -19,7 +19,7 @@ services:
     restart: unless-stopped
     image: node:20
     ports:
-      - '3005-3005'
+      - '3005:3005'
     volumes:
       - ./:/usr/src/modu
     working_dir: /usr/src/modu

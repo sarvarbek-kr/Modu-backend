@@ -130,7 +130,10 @@ export class FurnitureService {
 			.exec();
 		if (!result.length) throw new InternalServerErrorException(Message.N0_DATA_FOUND);
 		console.log('result:', result);
-		return result[0];
+		return {
+			list: result[0].list ?? [],
+			metaCounter: result[0].metaCounter ?? [],
+		};
 	}
 
 	private shapeMatchQuery(match: T, input: FurnituresInquiry): void {
